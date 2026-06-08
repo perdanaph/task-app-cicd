@@ -1,0 +1,8 @@
+# fullstack-cicd/.gitignore
+.env
+node_modules
+**/node_modules
+coverage
+**/coverage
+dist
+**/dist
