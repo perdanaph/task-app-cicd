@@ -51,7 +51,7 @@ class PostgresUserRepository extends IUserRepository {
   // Helper — convert DB row ke User entity
   _toUser(row) {
     return new User({
-      id: row.id,
+      id: parseInt(row.id),
       username: row.username,
       email: row.email,
       password: row.password,

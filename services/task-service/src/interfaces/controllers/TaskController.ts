@@ -47,7 +47,7 @@ export class TaskController {
         req.user!.id,
         req.body
       );
-      res.json(task);
+      res.status(200).json(task);
     } catch (err) {
       const message = (err as Error).message;
       const status = message === 'Unauthorized' ? 403

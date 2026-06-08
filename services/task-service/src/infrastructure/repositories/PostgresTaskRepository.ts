@@ -46,12 +46,12 @@ export class PostgresTaskRepository implements ITaskRepository {
   // Helper — convert DB row ke Task entity
   private _toTask(row: any): Task {
     return new Task({
-      id: row.id,
+      id: parseInt(row.id),
       title: row.title,
       description: row.description,
       priority: row.priority,
       done: row.done,
-      userId: row.user_id,
+      userId: parseInt(row.user_id),
       createdAt: row.created_at
     });
   }
