@@ -20,7 +20,6 @@ app.get('/health', async (req, res) => {
   } catch (err) {
     res.status(503).json({
       status: 'error',
-      service: 'user-service',
       database: 'disconnected',
       error: err.message
     });
@@ -35,20 +34,22 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3001;
+
 const startServer = async () => {
   try {
     await pool.query('SELECT 1');
     console.log('✅ Database connection established');
-
-    app.listen(PORT, () => {
-      console.log(`👤 User service running on port ${PORT}`);
-    });
   } catch (err) {
-    console.error('❌ Failed to connect to database:', err.message);
-    process.exit(1);
+    console.error('❌ Database connection failed:', err.message);
   }
+
+  app.listen(PORT, () => {
+    console.log(`👤 User service running on port ${PORT}`);
+  });
 };
 
-startServer();
+if (process.env.NODE_ENV !== 'test') {
+  startServer();
+}
 
 module.exports = app;

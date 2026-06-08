@@ -23,8 +23,10 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
 });
 
 const PORT = process.env.PORT ?? 3002;
-app.listen(PORT, () => {
-  console.log(`📋 Task service (TypeScript) running on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`📋 Task service running on port ${PORT}`);  });
+
+}
 
 export default app;
