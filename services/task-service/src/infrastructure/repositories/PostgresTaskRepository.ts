@@ -22,16 +22,15 @@ export class PostgresTaskRepository implements ITaskRepository {
     return task;
   }
 
-  async findById(id: number): Promise<Task | null> {
+  async findById(id: string): Promise<Task | null> {
     const result = await pool.query(
-      'SELECT * FROM tasks WHERE id = $1',
-      [id]
+      'SELECT * FROM tasks WHERE id = $1', [id]
     );
     if (result.rows.length === 0) return null;
     return this._toTask(result.rows[0]);
   }
 
-  async findByUserId(userId: number): Promise<Task[]> {
+  async findByUserId(userId: string): Promise<Task[]> {
     const result = await pool.query(
       'SELECT * FROM tasks WHERE user_id = $1 ORDER BY created_at DESC',
       [userId]
@@ -39,19 +38,18 @@ export class PostgresTaskRepository implements ITaskRepository {
     return result.rows.map(row => this._toTask(row));
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     await pool.query('DELETE FROM tasks WHERE id = $1', [id]);
   }
 
-  // Helper — convert DB row ke Task entity
   private _toTask(row: any): Task {
     return new Task({
-      id: parseInt(row.id),
+      id: row.id,           
       title: row.title,
       description: row.description,
       priority: row.priority,
       done: row.done,
-      userId: parseInt(row.user_id),
+      userId: row.user_id,  
       createdAt: row.created_at
     });
   }

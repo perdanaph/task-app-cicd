@@ -18,6 +18,7 @@ describe('RegisterUser Use Case', () => {
     });
     expect(result.username).toBe('john');
     expect(result.password).toBeUndefined();
+    expect(result.id).toMatch(/^[0-9a-f-]{36}$/i);
   });
 
   test('throws if email already registered', async () => {

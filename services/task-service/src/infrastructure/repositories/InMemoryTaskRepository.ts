@@ -14,18 +14,18 @@ export class InMemoryTaskRepository implements ITaskRepository {
     return task;
   }
 
-  async findById(id: number): Promise<Task | null> {
+  async findById(id: string): Promise<Task | null> {
     const task = this.tasks.find(t => t.id === id);
     return task ? new Task(task) : null;
   }
 
-  async findByUserId(userId: number): Promise<Task[]> {
+  async findByUserId(userId: string): Promise<Task[]> {
     return this.tasks
       .filter(t => t.userId === userId)
       .map(t => new Task(t));
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     const index = this.tasks.findIndex(t => t.id === id);
     if (index >= 0) this.tasks.splice(index, 1);
   }

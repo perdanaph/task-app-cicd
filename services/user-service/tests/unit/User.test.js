@@ -3,7 +3,7 @@ const User = require('../../src/domain/entities/User');
 describe('User Entity', () => {
   test('creates user with correct properties', () => {
     const user = new User({
-      id: 1,
+      id: '550e8400-e29b-41d4-a716-446655440000',
       username: 'john',
       email: 'john@example.com',
       password: 'hashed'
@@ -14,7 +14,8 @@ describe('User Entity', () => {
 
   test('toJSON excludes password', () => {
     const user = new User({
-      id: 1, username: 'john',
+      id: '550e8400-e29b-41d4-a716-446655440000', 
+      username: 'john',
       email: 'john@example.com',
       password: 'hashed'
     });

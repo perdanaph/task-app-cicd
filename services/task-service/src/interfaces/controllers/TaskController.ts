@@ -43,7 +43,7 @@ export class TaskController {
   async update(req: AuthRequest, res: Response): Promise<void> {
     try {
       const task = await this.updateTask.execute(
-        Number(req.params.id),
+        req.params.id,
         req.user!.id,
         req.body
       );
@@ -59,7 +59,7 @@ export class TaskController {
   async delete(req: AuthRequest, res: Response): Promise<void> {
     try {
       const result = await this.deleteTask.execute(
-        Number(req.params.id),
+        req.params.id,
         req.user!.id
       );
       res.json(result);

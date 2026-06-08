@@ -13,7 +13,7 @@ describe('CreateTask Use Case', () => {
     const task = await createTask.execute({
       title: 'Buy groceries',
       priority: 'high',
-      userId: 1
+      userId: 'user-uuid-123'
     });
     expect(task.title).toBe('Buy groceries');
     expect(task.priority).toBe('high');
@@ -21,13 +21,13 @@ describe('CreateTask Use Case', () => {
   });
 
   test('throws if title empty', async () => {
-    await expect(createTask.execute({ title: '', userId: 1 }))
+    await expect(createTask.execute({ title: '', userId: 'user-uuid-123' }))
       .rejects.toThrow('required');
   });
 
   test('throws if priority invalid', async () => {
     await expect(
-      createTask.execute({ title: 'Test', priority: 'urgent' as any, userId: 1 })
+      createTask.execute({ title: 'Test', priority: 'urgent' as any, userId: 'user-uuid-123' })
     ).rejects.toThrow('low, medium, or high');
   });
 });

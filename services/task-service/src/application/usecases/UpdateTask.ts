@@ -11,7 +11,7 @@ interface UpdateTaskInput {
 export class UpdateTask {
   constructor(private taskRepository: ITaskRepository) {}
 
-  async execute(id: number, userId: number, updates: UpdateTaskInput) {
+  async execute(id: string, userId: string, updates: UpdateTaskInput) {
     const task = await this.taskRepository.findById(id);
     if (!task) throw new Error('Task not found');
     if (task.userId !== userId) throw new Error('Unauthorized');

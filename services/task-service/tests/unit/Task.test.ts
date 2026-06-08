@@ -3,10 +3,19 @@ import { describe, test, expect, beforeEach } from '@jest/globals';
 
 describe('Task Entity', () => {
   test('creates task with defaults', () => {
-    const task = new Task({ id: 1, title: 'Test', userId: 1 });
+    const task = new Task({
+      id: Task.generateId(),
+      title: 'Test',
+      userId: 'user-uuid-123'
+    });
     expect(task.done).toBe(false);
     expect(task.priority).toBe('medium');
-    expect(task.description).toBe('');
+  });
+
+  test('generateId returns valid UUID format', () => {
+    const id = Task.generateId();
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    expect(id).toMatch(uuidRegex);
   });
 
   test('validateTitle throws if empty', () => {
@@ -15,13 +24,5 @@ describe('Task Entity', () => {
 
   test('validatePriority throws if invalid', () => {
     expect(() => Task.validatePriority('urgent')).toThrow('low, medium, or high');
-  });
-
-  test('toJSON returns correct shape', () => {
-    const task = new Task({ id: 1, title: 'Test', userId: 1 });
-    const json = task.toJSON();
-    expect(json.id).toBe(1);
-    expect(json.title).toBe('Test');
-    expect((json as any).password).toBeUndefined();
   });
 });

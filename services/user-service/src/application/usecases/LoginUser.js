@@ -12,19 +12,16 @@ class LoginUser {
       throw new Error('Email and password are required');
     }
 
-    // Cari user
     const user = await this.userRepository.findByEmail(email);
     if (!user) {
       throw new Error('Invalid credentials');
     }
 
-    // Cek password
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) {
       throw new Error('Invalid credentials');
     }
 
-    // Generate token
     const token = jwt.sign(
       { id: user.id, username: user.username },
       this.jwtSecret,
