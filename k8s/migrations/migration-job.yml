@@ -32,7 +32,7 @@ spec:
                   key: POSTGRES_PASSWORD
       containers:
         - name: migration
-          image: <DOCKERHUB_USERNAME>/migrations:latest
+          image: perdanaph/migrations:latest
           env:
             - name: DB_HOST
               value: postgres
