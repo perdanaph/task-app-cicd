@@ -1,6 +1,21 @@
 version: '3.8'
 
 services:
+  migrate:
+    build: ./migrations
+    container_name: migrate
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+    networks:
+      - appnet
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"  # Jalan sekali lalu stop
   postgres:
     image: postgres:16-alpine
     container_name: postgres

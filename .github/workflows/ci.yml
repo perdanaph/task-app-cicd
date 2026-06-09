@@ -121,6 +121,9 @@ jobs:
           - name: api-gateway
             context: ./services/api-gateway
             image: ${{ github.actor }}/api-gateway
+          - name: migrations
+            context: ./migrations
+            image: ${{ github.actor }}/migrations
 
     steps:
       - name: Checkout code
