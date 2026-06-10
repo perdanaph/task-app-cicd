@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Navbar } from '../components/layout/Navbar';
 import { TaskCard } from '../components/task/TaskCard';
-import { CreateTaskModal } from '../components/task/createTaskModal';
+import { CreateTaskModal } from '../components/task/CreateTaskModal';
 import { Button } from '../components/ui/Button';
 import { useTasks } from '../hooks/useTasks';
 import type { Task } from '../types';
