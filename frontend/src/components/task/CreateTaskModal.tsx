@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
@@ -7,14 +7,28 @@ import type { Task } from '../../types';
 interface CreateTaskModalProps {
   onClose: () => void;
   onCreate: (title: string, description: string, priority: string) => Promise<Task | void>;
+  onUpdate?: (id: string, title: string, description: string, priority: string) => Promise<Task | void>;
+  editingTask?: Task | null;
 }
 
-export const CreateTaskModal = ({ onClose, onCreate }: CreateTaskModalProps) => {
+export const CreateTaskModal = ({ onClose, onCreate, onUpdate, editingTask }: CreateTaskModalProps) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('medium');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (editingTask) {
+      setTitle(editingTask.title);
+      setDescription(editingTask.description);
+      setPriority(editingTask.priority);
+    } else {
+        setTitle('');
+        setDescription('');
+        setPriority('medium');
+    }
+  }, [editingTask]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -22,7 +36,11 @@ export const CreateTaskModal = ({ onClose, onCreate }: CreateTaskModalProps) => 
     setLoading(true);
 
     try {
-      await onCreate(title, description, priority);
+      if (editingTask && onUpdate) {
+        await onUpdate(editingTask.id, title, description, priority );
+      } else {
+        await onCreate(title, description, priority);
+      }
       onClose();
     } catch (err) {
       setError((err as Error).message);
@@ -31,11 +49,15 @@ export const CreateTaskModal = ({ onClose, onCreate }: CreateTaskModalProps) => 
     }
   };
 
+  const isEditing = !!editingTask;
+  const modalTitle = isEditing ? 'Edit Task' : 'New Task';
+  const submitText = isEditing ? 'Update Task' : 'Create Task';
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-semibold text-gray-900">New Task</h2>
+          <h2 className="text-lg font-semibold text-gray-900">{modalTitle}</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-xl">×</button>
         </div>
 
@@ -95,7 +117,7 @@ export const CreateTaskModal = ({ onClose, onCreate }: CreateTaskModalProps) => 
               Cancel
             </Button>
             <Button type="submit" loading={loading} className="flex-1">
-              Create Task
+              {submitText}
             </Button>
           </div>
         </form>

@@ -7,7 +7,7 @@ import { useTasks } from '../hooks/useTasks';
 import type { Task } from '../types';
 
 export const DashboardPage = () => {
-  const { tasks, loading, error, createTask, toggleTask, deleteTask } = useTasks();
+  const { tasks, loading, error, createTask, toggleTask, deleteTask, updateTask } = useTasks();
   const [showModal, setShowModal] = useState(false);
   const [filter, setFilter] = useState<'all' | 'active' | 'done'>('all');
   const [editTask, setEditTask] = useState<Task | null>(null);
@@ -22,6 +22,20 @@ export const DashboardPage = () => {
     total: tasks.length,
     done: tasks.filter(t => t.done).length,
     active: tasks.filter(t => !t.done).length,
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setEditTask(null);
+  };
+
+  const handleEdit = (task: Task) => {
+    setEditTask(task);
+    setShowModal(true);
+  };
+
+  const handleUpdateTask = async (id: string, title: string, description: string, priority: string) => {
+    await updateTask(id, { title, description, priority: priority as Task['priority'] });
   };
 
   return (
@@ -63,7 +77,10 @@ export const DashboardPage = () => {
             ))}
           </div>
 
-          <Button onClick={() => setShowModal(true)}>
+          <Button onClick={() => {
+            setEditTask(null);
+            setShowModal(true);
+          }}>
             + New Task
           </Button>
         </div>
@@ -93,7 +110,7 @@ export const DashboardPage = () => {
                 task={task}
                 onToggle={toggleTask}
                 onDelete={deleteTask}
-                onEdit={setEditTask}
+                onEdit={handleEdit}
               />
             ))}
           </div>
@@ -103,8 +120,10 @@ export const DashboardPage = () => {
       {/* Modal */}
       {showModal && (
         <CreateTaskModal
-          onClose={() => setShowModal(false)}
+          onClose={handleCloseModal}
           onCreate={createTask}
+          onUpdate={handleUpdateTask}
+          editingTask={editTask}
         />
       )}
     </div>
